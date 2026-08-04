@@ -1,0 +1,36 @@
+HTACCESS CHANGE NEEDED — ONE RULE
+
+Your existing .htaccess already handles /blog automatically once blog.php
+exists at your site root (it works exactly like /about -> about.php).
+Nothing to add for the landing page.
+
+Individual articles (/blog/some-slug) need ONE new rule, because there's
+no physical some-slug.php file for each article — they're all served
+dynamically through article.php.
+
+Open your existing root .htaccess and add this rule BEFORE the block
+labeled "# Serve .php files when clean URLs are requested" (that's the
+generic catch-all — your new rule needs to run first so it doesn't fall
+through to a 404):
+
+    # Blog article pages: /blog/{slug} -> /article.php?slug={slug}
+    RewriteRule ^blog/([a-z0-9\-]+)/?$ /article.php?slug=$1 [L,QSA]
+
+So the relevant section of your .htaccess should read, in order:
+
+    RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+    RewriteCond %{REQUEST_URI} !^/send-contact\.php$ [NC]
+    RewriteRule ^(.+?)\.php$ /$1 [R=301,L]
+
+    # Blog article pages: /blog/{slug} -> /article.php?slug={slug}
+    RewriteRule ^blog/([a-z0-9\-]+)/?$ /article.php?slug=$1 [L,QSA]
+
+    # Serve .php files when clean URLs are requested
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+    RewriteRule ^(.+)$ /$1.php [L]
+
+    ...(rest unchanged)
+
+Nothing else in your .htaccess needs to change.
