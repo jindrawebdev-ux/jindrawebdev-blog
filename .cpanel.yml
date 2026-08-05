@@ -5,6 +5,3 @@ deployment:
     - /bin/cp -R blog.php $DEPLOYPATH
     - /bin/cp -R article.php $DEPLOYPATH
     - /bin/cp -R blog-data $DEPLOYPATH
-    - /bin/mkdir -p $DEPLOYPATH/includes
-    - /bin/cp -R includes/header.php $DEPLOYPATH/includes/header.php
-    - /bin/cp -R includes/footer.php $DEPLOYPATH/includes/footer.php
