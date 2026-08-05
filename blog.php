@@ -1,4 +1,8 @@
 <?php
+// TEMP DEBUG — remove after diagnosing the 500 error
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 /**
  * JindraWebDev Blog — Landing Page
  * Sits at the site root next to about.php, services.php, contact.php.
