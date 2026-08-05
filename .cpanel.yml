@@ -4,6 +4,7 @@ deployment:
     - export DEPLOYPATH=/home/lexiizgf/jindrawebdev.com/
     - /bin/cp -R blog.php $DEPLOYPATH
     - /bin/cp -R article.php $DEPLOYPATH
+    - /bin/cp -R about.php $DEPLOYPATH
     - /bin/cp -R blog-data $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/includes
     - /bin/cp -R includes/header.php $DEPLOYPATH/includes/header.php

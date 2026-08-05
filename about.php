@@ -13,16 +13,8 @@ $page_url = "https://jindrawebdev.com/about";
 $page_robots = "index, follow";
 $current_page = "about";
 
-$page_styles = <<<CSS
-        @media (max-width: 767px) {
-            .mobile-hero-note-title {
-                font-size: clamp(1.15rem, 5.2vw, 1.5rem) !important;
-                line-height: 1.22 !important;
-                overflow-wrap: normal;
-                word-break: normal;
-            }
-        }
-CSS;
+// No $page_styles needed: includes/head.php already carries the
+// .mobile-hero-note-title rule this page's hero depends on.
 
 $aboutPageSchema = [
     "@context" => "https://schema.org",
