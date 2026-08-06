@@ -6,6 +6,9 @@ deployment:
     - /bin/cp -R article.php $DEPLOYPATH
     - /bin/cp -R about.php $DEPLOYPATH
     - /bin/cp -R blog-data $DEPLOYPATH
+    - /bin/cp -R sitemap.xml $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/css
+    - /bin/cp -R css/tailwind.min.css $DEPLOYPATH/css/tailwind.min.css
     - /bin/mkdir -p $DEPLOYPATH/includes
     - /bin/cp -R includes/header.php $DEPLOYPATH/includes/header.php
     - /bin/cp -R includes/footer.php $DEPLOYPATH/includes/footer.php
