@@ -56,7 +56,14 @@ usort($articles, function ($a, $b) {
     <section class="py-14 md:py-20 bg-brand-cream">
         <div class="max-w-7xl mx-auto px-5 md:px-8">
 
-            <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-10">
+            <?php
+            // Toolbar and grid share one width. While the blog is young the grid
+            // narrows (see below) and a full-width filter row would overhang the
+            // cards; keeping them equal reads as deliberate at any post count.
+            $n = count($articles);
+            $wrapClass = ($n >= 3) ? '' : (($n === 2) ? 'max-w-4xl mx-auto' : 'max-w-md mx-auto');
+            ?>
+            <div class="<?php echo $wrapClass; ?> flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-10">
                 <input
                     type="text"
                     id="blog-search"
@@ -74,7 +81,13 @@ usort($articles, function ($a, $b) {
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-grid">
+            <?php
+            // Two cards in a three-column grid leave an empty third column and
+            // look stranded. Self-corrects to the full three-up grid at the
+            // third post.
+            $gridCols = ($n >= 3) ? 'md:grid-cols-2 lg:grid-cols-3' : (($n === 2) ? 'md:grid-cols-2' : '');
+            ?>
+            <div class="<?php echo trim($wrapClass . ' grid ' . $gridCols); ?> gap-6" id="blog-grid">
                 <?php foreach ($articles as $a):
                     $catLabel = 'General';
                     foreach ($categories as $cat) {

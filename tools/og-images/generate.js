@@ -39,12 +39,6 @@ const BRAND = {
   cream: '#FBFAF7',
 };
 
-// Hero backgrounds, all drawn from the brand's green/charcoal range. Chosen per
-// ARTICLE rather than per category: a weekly blog will publish many posts in the
-// same category, and keying off the category alone would make those tiles
-// identical in the listing grid.
-const HERO_BG = ['#768473', '#333333', '#5F6B5D', '#8A9787', '#414A40', '#6B7A68'];
-
 /** Stable hash so a given slug always renders the same card across rebuilds. */
 function slugSeed(slug) {
   let h = 0;
@@ -118,22 +112,112 @@ const ogCard = (title, category) =>
     BRAND.charcoal
   );
 
-/** No title here on purpose — see the header comment. */
-const heroCard = (category, bg, seed) => {
-  // Nudge the rings so two cards sharing a colour still look distinct.
-  const dx = (seed % 5) * 34 - 68;
-  const dy = ((seed >> 3) % 5) * 30 - 60;
-  const scale = 1 + (((seed >> 6) % 5) - 2) * 0.09;
+/**
+ * Hero / listing artwork: deliberately TEXT-FREE.
+ *
+ * The first version printed the category here, which was a mistake — the card
+ * in blog.php renders the category label AND the title immediately below the
+ * image, so the tile read "Website & Local SEO / WEBSITE & LOCAL SEO / <title>".
+ * Worse, two posts in one category produced near-identical tiles, and a weekly
+ * blog will publish many posts per category.
+ *
+ * Abstract brand geometry sidesteps both problems: nothing is duplicated, and
+ * composition + palette vary per slug so tiles stay distinct forever.
+ */
+const HERO_PALETTES = [
+  { bg: '#333333', a: '#768473', b: '#9BAD98' },
+  { bg: '#768473', a: '#FBFAF7', b: '#333333' },
+  { bg: '#414A40', a: '#9BAD98', b: '#768473' },
+  { bg: '#9BAD98', a: '#333333', b: '#FBFAF7' },
+  { bg: '#2C2C2C', a: '#9BAD98', b: '#768473' },
+  { bg: '#5F6B5D', a: '#FBFAF7', b: '#9BAD98' },
+];
+
+/**
+ * Every composition is FULL BLEED: forms are large and deliberately run off the
+ * canvas edges. The first attempt placed small shapes on an open field and read
+ * as sparse and unfinished — at 1200x630 a shape needs to be several hundred
+ * pixels across to carry the frame.
+ */
+const COMPOSITIONS = [
+  // Three oversized discs bleeding off three edges.
+  (p) => `
+    <div style="position:absolute;left:-260px;top:-200px;width:820px;height:820px;border-radius:9999px;background:${p.a};opacity:.9"></div>
+    <div style="position:absolute;right:-220px;top:-120px;width:700px;height:700px;border-radius:9999px;background:${p.b};opacity:.55"></div>
+    <div style="position:absolute;left:38%;bottom:-380px;width:640px;height:640px;border-radius:9999px;background:${p.b};opacity:.9"></div>`,
+
+  // Concentric rings radiating from off-canvas left, spanning the full width.
+  (p) => `
+    <div style="position:absolute;left:-140px;top:50%;transform:translateY(-50%)">
+      ${[1500, 1240, 980, 720, 460, 220]
+        .map(
+          (d, i) =>
+            `<div style="position:absolute;width:${d}px;height:${d}px;left:${-d / 2}px;top:${-d / 2}px;
+             border-radius:9999px;border:${i > 3 ? 0 : 5}px solid ${i % 2 ? p.a : p.b};
+             ${i > 3 ? `background:${i % 2 ? p.a : p.b};` : ''}opacity:${0.85 - i * 0.07}"></div>`
+        )
+        .join('')}
+    </div>`,
+
+  // Hard diagonal split with a disc straddling the seam.
+  (p) => `
+    <div style="position:absolute;inset:0;background:${p.a};
+                clip-path:polygon(0 0, 100% 0, 100% 34%, 0 78%)"></div>
+    <div style="position:absolute;inset:0;background:${p.b};opacity:.75;
+                clip-path:polygon(0 88%, 100% 46%, 100% 100%, 0 100%)"></div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+                width:420px;height:420px;border-radius:9999px;border:6px solid ${p.bg}"></div>`,
+
+  // Full-bleed diagonal stripe field, one solid disc punched over it.
+  (p) => `
+    <div style="position:absolute;inset:-45%;transform:rotate(-28deg)">
+      ${Array.from({ length: 14 })
+        .map(
+          (_, i) =>
+            `<div style="position:absolute;left:0;right:0;top:${i * 7.4}%;height:${i % 3 === 0 ? 42 : 20}px;
+             background:${i % 2 ? p.a : p.b};opacity:${i % 3 === 0 ? 0.85 : 0.45}"></div>`
+        )
+        .join('')}
+    </div>
+    <div style="position:absolute;right:-120px;top:50%;transform:translateY(-50%);
+                width:560px;height:560px;border-radius:9999px;background:${p.bg};opacity:.92"></div>
+    <div style="position:absolute;right:-40px;top:50%;transform:translateY(-50%);
+                width:400px;height:400px;border-radius:9999px;border:6px solid ${p.a}"></div>`,
+
+  // Quarter-arc tiles tiled edge to edge.
+  (p) => `
+    ${Array.from({ length: 12 })
+      .map((_, i) => {
+        const col = i % 4,
+          row = Math.floor(i / 4);
+        const corners = ['9999px 0 0 0', '0 9999px 0 0', '0 0 9999px 0', '0 0 0 9999px'];
+        return `<div style="position:absolute;left:${col * 300}px;top:${row * 210}px;
+          width:300px;height:210px;background:${(col + row) % 2 ? p.a : p.b};
+          opacity:${0.35 + ((col * 2 + row) % 4) * 0.2};
+          border-radius:${corners[(col + row * 3) % 4]}"></div>`;
+      })
+      .join('')}`,
+
+  // Stacked pill bars bleeding off the right, anchored by a large disc.
+  (p) => `
+    <div style="position:absolute;right:-300px;top:-160px;width:840px;height:840px;
+                border-radius:9999px;background:${p.a};opacity:.85"></div>
+    ${[0, 1, 2, 3, 4, 5]
+      .map(
+        (i) =>
+          `<div style="position:absolute;left:-80px;top:${40 + i * 100}px;
+           width:${[760, 980, 620, 880, 540, 820][i]}px;height:62px;border-radius:9999px;
+           background:${i % 2 ? p.b : p.bg};opacity:${i % 2 ? 0.9 : 0.35}"></div>`
+      )
+      .join('')}`,
+];
+
+const heroCard = (seed) => {
+  const p = HERO_PALETTES[seed % HERO_PALETTES.length];
+  const comp = COMPOSITIONS[(seed >> 4) % COMPOSITIONS.length];
   return shell(
-    `<div class="card">
-       <div class="rings" style="transform:translate(${dx}px,${dy}px) scale(${scale})">
-         <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-       </div>
-       <div class="kicker">The JindraWebDev Blog</div>
-       <div><div class="rule"></div><div class="big">${esc(category)}</div></div>
-       <div class="foot"><div class="mark">JindraWebDev</div><div class="url">jindrawebdev.com</div></div>
-     </div>`,
-    bg
+    `<div style="position:relative;width:1200px;height:630px;overflow:hidden">${comp(p)}</div>`,
+    p.bg
   );
 };
 
@@ -195,9 +279,8 @@ async function main() {
   for (const a of data.articles) {
     const label = labels[a.category] || 'Insights';
     const seed = slugSeed(a.slug);
-    const bg = HERO_BG[seed % HERO_BG.length];
     await shoot(ogCard(a.title, label), `${a.slug}-og.jpg`);
-    await shoot(heroCard(label, bg, seed), `${a.slug}-hero.jpg`);
+    await shoot(heroCard(seed), `${a.slug}-hero.jpg`);
     a.ogImage = `/images/blog/${a.slug}-og.jpg`;
     a.heroImage = `/images/blog/${a.slug}-hero.jpg`;
   }

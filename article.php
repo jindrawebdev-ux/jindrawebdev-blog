@@ -160,11 +160,14 @@ $contentPath = $_SERVER['DOCUMENT_ROOT'] . '/blog-data/content/' . $article['con
         </div>
     </section>
 
-    <?php if (!empty($article['heroImage'])): ?>
-    <div class="max-w-5xl mx-auto px-5 md:px-8 -mt-8 md:-mt-10 relative z-10">
-        <img src="<?php echo htmlspecialchars($article['heroImage']); ?>" alt="<?php echo htmlspecialchars($article['title']); ?>" class="w-full rounded-[1.5rem] shadow-soft object-cover aspect-[1200/630]">
-    </div>
-    <?php endif; ?>
+    <?php /*
+      No hero image here on purpose. The headline sits directly above and the
+      quick answer directly below, so a full-width decorative slab only pushed
+      the actual content down -- worst on mobile -- and cost a large image load
+      near the top of the page. heroImage is still used on the /blog listing,
+      where a grid of text-only cards would look broken, and ogImage still
+      carries the share card.
+    */ ?>
 
     <section class="py-14 md:py-20 bg-brand-cream">
         <div class="max-w-3xl mx-auto px-5 md:px-8">
