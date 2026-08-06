@@ -125,6 +125,9 @@ $page_image = $ogImageUrl;
 $page_image_alt = $article['title'];
 $page_robots = "index, follow, max-image-preview:large";
 $page_schema = $schemaBlocks;
+$page_type = "article";           // og:type — articles are not "website"
+$page_published = $publishedIso;  // drives article:published_time
+$page_modified = $modifiedIso;    // drives article:modified_time
 $current_page = "blog";
 
 include $_SERVER['DOCUMENT_ROOT'] . "/includes/head.php";
