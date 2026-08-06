@@ -11,10 +11,22 @@
     }
   },
   "categories": [
-    { "slug": "getting-started", "label": "Getting Started" },
-    { "slug": "website-tips", "label": "Website & Local SEO" },
-    { "slug": "social-media", "label": "Social Media" },
-    { "slug": "branding-marketing", "label": "Branding & Marketing" }
+    {
+      "slug": "getting-started",
+      "label": "Getting Started"
+    },
+    {
+      "slug": "website-tips",
+      "label": "Website & Local SEO"
+    },
+    {
+      "slug": "social-media",
+      "label": "Social Media"
+    },
+    {
+      "slug": "branding-marketing",
+      "label": "Branding & Marketing"
+    }
   ],
   "articles": [
     {
@@ -23,9 +35,13 @@
       "metaTitle": "5 Signs Your Website Is Costing You Customers | JindraWebDev",
       "metaDescription": "Slow load times, no mobile layout, and buried contact info are silently turning visitors away. Here's how to spot the problem and what to fix first.",
       "category": "website-tips",
-      "tags": ["website design", "local seo", "small business"],
-      "datePublished": "2026-08-10",
-      "dateModified": "2026-08-10",
+      "tags": [
+        "website design",
+        "local seo",
+        "small business"
+      ],
+      "datePublished": "2026-07-29",
+      "dateModified": "2026-07-29",
       "readTimeMinutes": 6,
       "ogImage": "/images/blog-og-default.jpg",
       "heroImage": "/images/blog-og-default.jpg",
@@ -42,8 +58,14 @@
         }
       ],
       "sources": [
-        { "title": "Think with Google: Mobile Page Speed Research", "url": "https://www.thinkwithgoogle.com/marketing-strategies/app-and-mobile/mobile-page-speed-new-industry-benchmarks/" },
-        { "title": "Google Search Central: Page Experience", "url": "https://developers.google.com/search/docs/appearance/page-experience" }
+        {
+          "title": "Think with Google: Mobile Page Speed Research",
+          "url": "https://www.thinkwithgoogle.com/marketing-strategies/app-and-mobile/mobile-page-speed-new-industry-benchmarks/"
+        },
+        {
+          "title": "Google Search Central: Page Experience",
+          "url": "https://developers.google.com/search/docs/appearance/page-experience"
+        }
       ],
       "contentFile": "signs-your-website-is-costing-you-customers.html"
     },
@@ -53,9 +75,13 @@
       "metaTitle": "Google Business Profile Changes: What Small-Town Businesses Need to Know | JindraWebDev",
       "metaDescription": "Google keeps tweaking how local businesses show up in search. Here's a plain-English breakdown of what changed and what to update on your profile this month.",
       "category": "website-tips",
-      "tags": ["google business profile", "local seo", "small business news"],
-      "datePublished": "2026-08-17",
-      "dateModified": "2026-08-17",
+      "tags": [
+        "google business profile",
+        "local seo",
+        "small business news"
+      ],
+      "datePublished": "2026-08-05",
+      "dateModified": "2026-08-05",
       "readTimeMinutes": 5,
       "ogImage": "/images/blog-og-default.jpg",
       "heroImage": "/images/blog-og-default.jpg",
@@ -68,7 +94,10 @@
         }
       ],
       "sources": [
-        { "title": "Google Business Profile Help: What's New", "url": "https://support.google.com/business/answer/9847904" }
+        {
+          "title": "Google Business Profile Help: What's New",
+          "url": "https://support.google.com/business/answer/9847904"
+        }
       ],
       "contentFile": "google-business-profile-changes-small-towns.html"
     }

@@ -23,6 +23,14 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
 $articlesData = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/blog-data/articles.json'), true);
 $categories = $articlesData['categories'];
 $articles = $articlesData['articles'];
+
+// Scheduling: an article with a future datePublished stays hidden until that
+// date arrives, so posts can be queued up ahead of time. Dates are plain
+// YYYY-MM-DD, so a direct string comparison is correct and timezone-safe.
+$todayStr = date('Y-m-d');
+$articles = array_values(array_filter($articles, function ($a) use ($todayStr) {
+    return $a['datePublished'] <= $todayStr;
+}));
 usort($articles, function ($a, $b) {
     $ta = strtotime($a['datePublished']);
     $tb = strtotime($b['datePublished']);

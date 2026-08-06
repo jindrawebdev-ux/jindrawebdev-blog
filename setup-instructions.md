@@ -45,6 +45,18 @@ Adding an article is exactly two steps — this structure is deliberately automa
 1. Save the article's body copy as `blog-data/content/{slug}.html` — just the content (matching the two samples: `<h2>`/`<p>` tags with the same Tailwind utility classes already in the samples, so it inherits your site's typography with zero extra CSS).
 2. Add one object to the `"articles"` array in `blog-data/articles.json` with that same `slug`, plus title, metaTitle, metaDescription, category, tags, dates, read time, image path, excerpt, quickAnswer, optional faq[], and sources[].
 
+
+### Scheduling posts ahead of time
+
+`datePublished` doubles as a publish schedule. An article dated in the
+future stays hidden from `/blog`, and its URL returns a 404, until that
+date arrives — so you can write several posts in one sitting and let them
+appear on their own. Dating a post today (or in the past) publishes it
+immediately.
+
+Don't add a future-dated post to `sitemap.xml` until it's live, or you'll
+point Google at a URL that 404s.
+
 Nothing else needs to change — `blog.php` and `article.php` both read from this file automatically, so the new article appears on the landing page, is searchable/filterable, and has full SEO/AEO/GEO metadata immediately.
 
 ## 6. Categories

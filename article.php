@@ -32,6 +32,13 @@ foreach ($articles as $a) {
     if ($a['slug'] === $slug) { $article = $a; break; }
 }
 
+// Scheduling: a future-dated article isn't published yet, so it behaves as
+// not-found even if someone guesses the URL. Keeps blog.php and this page
+// consistent — nothing is reachable before its publish date.
+if ($article !== null && $article['datePublished'] > date('Y-m-d')) {
+    $article = null;
+}
+
 if (!$article) {
     http_response_code(404);
     $page_title = "Article Not Found | JindraWebDev";
