@@ -46,6 +46,26 @@ Adding an article is exactly two steps — this structure is deliberately automa
 2. Add one object to the `"articles"` array in `blog-data/articles.json` with that same `slug`, plus title, metaTitle, metaDescription, category, tags, dates, read time, image path, excerpt, quickAnswer, optional faq[], and sources[].
 
 
+### Publishing a post (the automated flow)
+
+Two files, one push:
+
+1. `blog-data/content/{slug}.html` — the article body
+2. one object appended to `articles` in `blog-data/articles.json`
+
+Leave `ogImage` and `heroImage` out; the generator fills them in.
+
+Pushing to `main` runs `.github/workflows/blog-assets.yml`, which generates
+the article's share and hero images, rebuilds `sitemap.xml`, and commits the
+result. Your cPanel cron then pulls and deploys it.
+
+The same workflow runs daily, so a post dated in the future enters the
+sitemap on its publish date without anyone pushing that day.
+
+After changing the image template in `tools/og-images/generate.js`, existing
+images are left alone by default. To redraw them all, run the workflow
+manually from the Actions tab with **Regenerate every image** ticked.
+
 ### Scheduling posts ahead of time
 
 `datePublished` doubles as a publish schedule. An article dated in the

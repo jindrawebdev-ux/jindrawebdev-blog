@@ -1,0 +1,86 @@
+name: Build blog assets
+
+# Turns publishing a post into: edit two files, push. Everything mechanical --
+# share/hero images and the sitemap -- is produced here and committed back, so
+# it can't be forgotten or done inconsistently.
+#
+# Three triggers, each for a different reason:
+#   push     new or edited article -> generate its images, refresh the sitemap
+#   schedule a scheduled post whose date has arrived must enter the sitemap on
+#            its own, with nobody pushing anything that day
+#   manual   re-run after changing the image template (use force_images)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blog-data/**'
+      - 'tools/og-images/**'
+      - 'tools/sitemap/**'
+      - '.github/workflows/blog-assets.yml'
+  schedule:
+    # 08:10 UTC daily. Off the hour on purpose: scheduled jobs at :00 sit in
+    # GitHub's busiest queue and get delayed.
+    - cron: '10 8 * * *'
+  workflow_dispatch:
+    inputs:
+      force_images:
+        description: 'Regenerate every image, even ones that already exist'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-assets
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install image generator dependencies
+        working-directory: tools/og-images
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Generate missing blog images
+        working-directory: tools/og-images
+        run: node generate.js ${{ (github.event_name == 'workflow_dispatch' && inputs.force_images) && '--force' || '' }}
+
+      - name: Rebuild sitemap
+        run: node tools/sitemap/generate.js
+
+      - name: Commit any changes
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Nothing changed — no commit needed."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/blog blog-data/articles.json sitemap.xml
+          # [skip ci] matters: this commit touches blog-data/articles.json, which
+          # is a push trigger above. Without it the workflow would retrigger
+          # itself on its own commit.
+          git commit -m "Generate blog images and sitemap [skip ci]"
+          git push
+          echo "Committed regenerated assets."
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Blog assets"
+            echo ""
+            echo "Images in \`images/blog/\`: $(ls -1 images/blog 2>/dev/null | wc -l)"
+            echo "URLs in sitemap: $(grep -c '<loc>' sitemap.xml)"
+          } >> "$GITHUB_STEP_SUMMARY"

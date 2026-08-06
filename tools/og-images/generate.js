@@ -169,7 +169,15 @@ async function main() {
     deviceScaleFactor: 1,
   });
 
+  // Existing images are left alone so a scheduled CI run doesn't rewrite every
+  // file each time. Pass --force to regenerate after a template change.
+  const force = process.argv.includes('--force');
+
   const shoot = async (html, file) => {
+    if (!force && fs.existsSync(path.join(OUT_DIR, file))) {
+      console.log(`  ${file}  (exists, skipped)`);
+      return;
+    }
     await page.setContent(html, { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({
