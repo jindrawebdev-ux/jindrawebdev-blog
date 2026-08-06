@@ -9,6 +9,8 @@ deployment:
     - /bin/cp -R sitemap.xml $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/css
     - /bin/cp -R css/tailwind.min.css $DEPLOYPATH/css/tailwind.min.css
+    - /bin/mkdir -p $DEPLOYPATH/images/blog
+    - /bin/cp -R images/blog/. $DEPLOYPATH/images/blog/
     - /bin/mkdir -p $DEPLOYPATH/includes
     - /bin/cp -R includes/header.php $DEPLOYPATH/includes/header.php
     - /bin/cp -R includes/footer.php $DEPLOYPATH/includes/footer.php

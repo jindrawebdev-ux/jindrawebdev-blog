@@ -3,7 +3,7 @@
     "name": "JindraWebDev",
     "baseUrl": "https://jindrawebdev.com",
     "themeColor": "#768473",
-    "defaultOgImage": "/images/blog-og-default.jpg",
+    "defaultOgImage": "/images/blog/blog-og-default.jpg",
     "author": {
       "name": "Lexis Jindra",
       "title": "Founder, JindraWebDev",
@@ -43,8 +43,8 @@
       "datePublished": "2026-07-29",
       "dateModified": "2026-07-29",
       "readTimeMinutes": 6,
-      "ogImage": "/images/blog-og-default.jpg",
-      "heroImage": "/images/blog-og-default.jpg",
+      "ogImage": "/images/blog/signs-your-website-is-costing-you-customers-og.jpg",
+      "heroImage": "/images/blog/signs-your-website-is-costing-you-customers-hero.jpg",
       "excerpt": "A slow, cluttered, or hard-to-navigate website doesn't just look bad — it actively pushes potential customers toward your competitors. Here are the five most common culprits and how to fix them.",
       "quickAnswer": "The most common website problems that cost small businesses customers are slow load times, no mobile-friendly layout, unclear calls to action, buried contact information, and outdated content. Fixing even one or two of these can measurably improve how many visitors turn into inquiries.",
       "faq": [
@@ -83,8 +83,8 @@
       "datePublished": "2026-08-05",
       "dateModified": "2026-08-05",
       "readTimeMinutes": 5,
-      "ogImage": "/images/blog-og-default.jpg",
-      "heroImage": "/images/blog-og-default.jpg",
+      "ogImage": "/images/blog/google-business-profile-changes-small-towns-og.jpg",
+      "heroImage": "/images/blog/google-business-profile-changes-small-towns-hero.jpg",
       "excerpt": "Google Business Profile is often the first thing a potential customer sees about your business — before your website. Here's what's changed recently and what to check today.",
       "quickAnswer": "Google periodically changes how it verifies, ranks, and displays local business profiles. Small-town businesses should regularly check their category accuracy, hours, photos, and review responses, since these directly affect whether they show up in local map searches.",
       "faq": [

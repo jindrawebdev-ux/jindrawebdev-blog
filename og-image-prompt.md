@@ -1,3 +1,11 @@
+> **Superseded.** Blog images are now generated automatically by
+> `tools/og-images/generate.js`, which renders branded cards in the real
+> brand fonts and colours — consistent every week, no per-image cost, and
+> one step in the publishing pipeline rather than a manual chore.
+>
+> Keep this file if you ever want art-directed photographic images for a
+> specific feature post; the prompt below still works for that.
+
 # Reusable Blog OG Image — Prompt
 
 This is one image, reused across every article (not generated per-article) — exactly what you asked for. It lives at `/images/blog-og-default.jpg` and is what shows up when a blog post is shared on Facebook, Instagram, iMessage, LinkedIn, etc., and in Google search result previews.

@@ -1,0 +1,8 @@
+{
+  "name": "jindrawebdev-og-images",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generates branded blog share/hero images with headless Chromium",
+  "scripts": { "build": "node generate.js" },
+  "dependencies": { "playwright": "^1.49.0" }
+}

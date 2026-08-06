@@ -1,3 +1,5 @@
 node_modules/
 tailwind-build/node_modules/
 tailwind-build/package-lock.json
+tools/og-images/node_modules/
+tools/og-images/package-lock.json
