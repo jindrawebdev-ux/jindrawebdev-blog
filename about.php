@@ -120,7 +120,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                         </div>
                         <div class="rounded-[2rem] bg-brand-offwhite border border-brand-dark/10 p-3 sm:p-4 shadow-card">
                             <div class="aspect-[3/4.35] sm:aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-white flex items-center justify-center">
-                                <img src="/images/about-motherhood.webp" alt="Motherhood inspired photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <img src="/images/about-motherhood.webp" loading="lazy" decoding="async" alt="Motherhood inspired photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div class="hidden w-full h-full items-center justify-center p-8 text-center bg-gradient-to-br from-brand-light/25 to-white">
                                     <div>
                                         <p class="font-serif text-3xl text-brand-charcoal font-bold mb-3">Motherhood Photo</p>
@@ -135,7 +135,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                         <div class="grid md:grid-cols-[.78fr_1.22fr] gap-8 items-center">
                             <div class="rounded-[1.5rem] bg-white/8 border border-white/10 p-4">
                                 <div class="aspect-[4/4.2] sm:aspect-[4/3] rounded-[1.1rem] overflow-hidden bg-white/10 flex items-center justify-center">
-                                    <img src="/images/about-jack-memory.webp" alt="Personal memory photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <img src="/images/about-jack-memory.webp" loading="lazy" decoding="async" alt="Personal memory photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div class="hidden w-full h-full items-center justify-center p-6 text-center">
                                         <div>
                                             <p class="font-serif text-2xl font-bold mb-2">Memory Photo</p>
@@ -203,7 +203,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                 <div class="relative min-h-[850px] sm:min-h-[780px] lg:min-h-[520px]">
                     <div class="absolute left-0 top-0 w-[78%] sm:w-[72%] lg:w-[68%] rounded-[2rem] bg-white border border-brand-dark/10 p-3 sm:p-4 shadow-soft">
                         <div class="aspect-[3/4.45] sm:aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-brand-cream flex items-center justify-center">
-                            <img src="/images/about-workspace.webp" alt="Workspace photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="/images/about-workspace.webp" loading="lazy" decoding="async" alt="Workspace photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="hidden w-full h-full items-center justify-center p-8 text-center bg-gradient-to-br from-white to-brand-light/20">
                                 <div>
                                     <p class="font-serif text-3xl font-bold mb-3">Workspace</p>
@@ -214,7 +214,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                     </div>
                     <div class="absolute right-0 top-[445px] sm:top-auto sm:bottom-0 w-[78%] sm:w-[70%] lg:w-[58%] rounded-[2rem] bg-white border border-brand-dark/10 p-3 sm:p-4 shadow-soft">
                         <div class="aspect-[3/4] sm:aspect-[4/4] rounded-[1.5rem] overflow-hidden bg-brand-cream flex items-center justify-center">
-                            <img src="/images/about-small-town.webp" alt="Small town Nebraska photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="/images/about-small-town.webp" loading="lazy" decoding="async" alt="Small town Nebraska photo placeholder" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div class="hidden w-full h-full items-center justify-center p-8 text-center bg-gradient-to-br from-brand-light/25 to-white">
                                 <div>
                                     <p class="font-serif text-3xl font-bold mb-3">Local Life</p>
