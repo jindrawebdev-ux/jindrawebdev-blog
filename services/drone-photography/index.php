@@ -11,12 +11,10 @@
  * pages link to /locations/{city}/ pages that do not exist on the server —
  * 24 dead links between them. Deliberately not repeating that here.
  *
- * TODO (Lexis): the FAQ below asks about FAA Part 107 certification but
- * does NOT claim you hold it, because I have no way to verify that.
- * Commercial drone work in the US legally requires a Part 107 Remote
- * Pilot Certificate. Edit that answer to state your real status before
- * promoting this page — it is both a legal matter and the single
- * strongest trust signal on the page.
+ * FAA Part 107: certification is scheduled for September 2026, so the FAQ
+ * states that plainly rather than implying it is already held. Commercial
+ * drone flight in the US requires it; the page should not read as though
+ * paid work can be delivered before then.
  */
 $page_title = "Drone Photography & Aerial Video Omaha NE | JindraWebDev";
 $page_description = "Drone footage and aerial photography for small businesses, properties, and community events in Omaha and Eastern Nebraska. Delivered ready for your website and social media.";
@@ -99,6 +97,14 @@ $page_schema = <<<HTML
         },
         {
           "@type": "Question",
+          "name": "Are you FAA certified to fly commercially?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "I am testing for my FAA Part 107 Remote Pilot Certificate in September 2026 and am booking commercial drone work from that point forward. Commercial flights in the United States require that certification."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Do you also handle the website the footage goes on?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -123,7 +129,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
         <div class="absolute -top-40 -right-32 w-[34rem] h-[34rem] rounded-full bg-brand-light/25 blur-3xl"></div>
         <div class="absolute top-40 -left-40 w-[28rem] h-[28rem] rounded-full bg-brand-dark/10 blur-3xl"></div>
 
-        <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-12 pb-20 md:pt-16 md:pb-24 lg:pt-[5rem] lg:pb-[6rem] grid lg:grid-cols-[1.05fr_.95fr] gap-10 md:gap-14 items-center">
+        <div class="relative max-w-4xl mx-auto px-5 md:px-8 pt-12 pb-20 md:pt-16 md:pb-24 lg:pt-[5rem] lg:pb-[6rem]">
             <div>
                 <div class="inline-flex items-center gap-3 rounded-full bg-white border border-brand-dark/10 px-4 py-2 shadow-card mb-7">
                     <span class="w-2 h-2 rounded-full bg-brand-dark"></span>
@@ -159,19 +165,6 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                 </div>
             </div>
 
-            <div class="relative">
-                <div class="relative rounded-[2rem] overflow-hidden shadow-soft bg-white border border-brand-dark/10 p-4">
-                    <div class="aspect-[4/5] rounded-[1.5rem] overflow-hidden bg-brand-offwhite">
-                        <img src="/images/services-drone.webp" alt="Aerial drone photograph of a Nebraska property" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="hidden w-full h-full items-center justify-center p-10 text-center bg-gradient-to-br from-brand-light/30 to-brand-offwhite">
-                            <div>
-                                <p class="font-serif text-3xl text-brand-charcoal font-bold mb-3">Aerial Photo</p>
-                                <p class="text-xs uppercase tracking-[0.22em] text-brand-charcoal/50 font-bold">Add /images/services-drone.webp</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -308,13 +301,9 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                     <p class="text-brand-charcoal/70 leading-relaxed mt-4">Yes. Aerial views show lot lines, acreage, outbuildings, and how a property sits relative to roads and neighbours &mdash; things ground-level photos cannot convey. Particularly useful for rural and acreage listings.</p>
                 </details>
 
-                <!-- TODO (Lexis): replace this answer with your real certification status
-                     before promoting the page. Commercial drone work in the US requires an
-                     FAA Part 107 Remote Pilot Certificate, and this is the strongest trust
-                     signal on the page — but it must be accurate. -->
                 <details class="rounded-3xl bg-white border border-brand-dark/10 p-6">
-                    <summary class="cursor-pointer font-bold text-brand-charcoal">Are you licensed to fly commercially?</summary>
-                    <p class="text-brand-charcoal/70 leading-relaxed mt-4">Commercial drone work in the United States requires an FAA Part 107 Remote Pilot Certificate, and flights must follow FAA rules on airspace, altitude, and operating over people. Get in touch and I will confirm the details for your specific location and project.</p>
+                    <summary class="cursor-pointer font-bold text-brand-charcoal">Are you FAA certified to fly commercially?</summary>
+                    <p class="text-brand-charcoal/70 leading-relaxed mt-4">I am testing for my FAA Part 107 Remote Pilot Certificate in September 2026, and I am booking commercial drone work from that point forward. Commercial flights in the United States require that certification, so I would rather tell you exactly where I stand than be vague about it. If you are planning a project for autumn or later, now is a good time to talk.</p>
                 </details>
 
                 <details class="rounded-3xl bg-white border border-brand-dark/10 p-6">
