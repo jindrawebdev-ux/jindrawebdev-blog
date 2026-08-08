@@ -34,9 +34,9 @@ $page_schema = <<<HTML
       "name": "JindraWebDev services",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Website design + builds", "url": "https://jindrawebdev.com/services/website-design/" },
-        { "@type": "ListItem", "position": 2, "name": "Brand + visual direction" },
+        { "@type": "ListItem", "position": 2, "name": "Brand + visual direction", "url": "https://jindrawebdev.com/services/brand-design/" },
         { "@type": "ListItem", "position": 3, "name": "Google + local SEO", "url": "https://jindrawebdev.com/services/local-seo/" },
-        { "@type": "ListItem", "position": 4, "name": "Digital cleanup" },
+        { "@type": "ListItem", "position": 4, "name": "Digital cleanup", "url": "https://jindrawebdev.com/services/digital-cleanup/" },
         { "@type": "ListItem", "position": 5, "name": "Drone footage + aerial photography", "url": "https://jindrawebdev.com/services/drone-photography/" }
       ]
     }
@@ -122,6 +122,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                             <li>✓ Typography direction</li>
                             <li>✓ Social graphic templates</li>
                         </ul>
+                        <a href="/services/brand-design/" class="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-brand-dark hover:text-brand-charcoal transition">Brand design details <span aria-hidden="true">&rarr;</span></a>
                     </article>
 
                     <article class="rounded-3xl bg-brand-cream p-7 border border-brand-dark/10 hover:shadow-card transition">
@@ -147,6 +148,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                             <li>✓ Email graphics</li>
                             <li>✓ Platform organization</li>
                         </ul>
+                        <a href="/services/digital-cleanup/" class="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-brand-dark hover:text-brand-charcoal transition">Digital cleanup details <span aria-hidden="true">&rarr;</span></a>
                     </article>
 
                     <article id="drone" class="rounded-3xl bg-brand-charcoal text-white p-7 border border-brand-charcoal/20 hover:shadow-card transition lg:col-span-2">

@@ -13,6 +13,10 @@ deployment:
     - /bin/cp -R services/website-design/index.php $DEPLOYPATH/services/website-design/index.php
     - /bin/mkdir -p $DEPLOYPATH/services/drone-photography
     - /bin/cp -R services/drone-photography/index.php $DEPLOYPATH/services/drone-photography/index.php
+    - /bin/mkdir -p $DEPLOYPATH/services/brand-design
+    - /bin/cp -R services/brand-design/index.php $DEPLOYPATH/services/brand-design/index.php
+    - /bin/mkdir -p $DEPLOYPATH/services/digital-cleanup
+    - /bin/cp -R services/digital-cleanup/index.php $DEPLOYPATH/services/digital-cleanup/index.php
     - /bin/cp -R blog-data $DEPLOYPATH
     - /bin/cp -R sitemap.xml $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/css
