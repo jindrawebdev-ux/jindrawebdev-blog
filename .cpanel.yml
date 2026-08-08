@@ -17,6 +17,8 @@ deployment:
     - /bin/cp -R sitemap.xml $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/css
     - /bin/cp -R css/tailwind.min.css $DEPLOYPATH/css/tailwind.min.css
+    - /bin/mkdir -p $DEPLOYPATH/css/fonts
+    - /bin/cp -R css/fonts/. $DEPLOYPATH/css/fonts/
     - /bin/mkdir -p $DEPLOYPATH/images/blog
     - /bin/cp -R images/blog/. $DEPLOYPATH/images/blog/
     - /bin/mkdir -p $DEPLOYPATH/includes
