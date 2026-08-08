@@ -12,6 +12,18 @@
  * the workflow also runs on a daily schedule — when a scheduled post's date
  * arrives, the next run adds it without anyone pushing anything.
  *
+ * lastmod is emitted ONLY where the date is genuinely known: article URLs
+ * (from articles.json) and the blog index (the newest post's date). Static
+ * pages get no lastmod, because this repo doesn't contain index.php,
+ * contact.php and friends, so their real modification dates are unknowable
+ * from here.
+ *
+ * An earlier version stamped today's date on every static page. Combined with
+ * the daily run that produced a commit every day claiming the whole site had
+ * just changed — noise in the history, and a lastmod signal Google learns to
+ * distrust precisely because it is always "today". Omitting the field is
+ * honest and lets Google fall back to its own crawl heuristics.
+ *
  * Usage:  node tools/sitemap/generate.js
  */
 
@@ -55,7 +67,8 @@ const entries = [];
 for (const p of STATIC_PAGES) {
   entries.push({
     loc: BASE + p.loc,
-    lastmod: p.loc === '/blog' ? newestPost : today,
+    // Only the blog index has a knowable date: its newest post.
+    lastmod: p.loc === '/blog' ? newestPost : null,
     changefreq: p.changefreq,
     priority: p.priority,
   });
@@ -81,7 +94,7 @@ const xml =
       (e) =>
         `  <url>\n` +
         `    <loc>${e.loc}</loc>\n` +
-        `    <lastmod>${e.lastmod}</lastmod>\n` +
+        (e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>\n` : '') +
         `    <changefreq>${e.changefreq}</changefreq>\n` +
         `    <priority>${e.priority}</priority>\n` +
         `  </url>\n`
