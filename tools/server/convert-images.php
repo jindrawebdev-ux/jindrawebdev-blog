@@ -6,6 +6,11 @@
  * A 2 GB branding-session folder typically lands somewhere around
  * 100-250 MB, with no visible quality loss at web sizes.
  *
+ * If the server has an image library but no WebP support, it writes resized
+ * JPEGs instead. Most of the saving comes from the resize -- a 6000px camera
+ * file cut to 2000px sheds roughly 90% before format matters -- so that path
+ * is still worth running rather than waiting on a host.
+ *
  * Why this exists as a server script rather than something run locally:
  * the source photos are far too large to move off the server, so the work
  * has to happen where they already are.
@@ -63,13 +68,55 @@ echo '<h1>Image conversion</h1>';
 
 // ------------------------------------------------------- capability check
 
-$hasGdWebp = function_exists('imagewebp');
-$hasImagick = class_exists('Imagick');
-if (!$hasGdWebp && !$hasImagick) {
-    exit('<p class="err">Neither GD-with-WebP nor Imagick is available on this server. '
-       . 'Ask your host to enable one of them.</p>');
+$gdLoaded    = extension_loaded('gd');
+$hasGdWebp   = function_exists('imagewebp');
+$hasGdJpeg   = function_exists('imagejpeg');
+$hasImagick  = class_exists('Imagick');
+$imagickWebp = false;
+if ($hasImagick) {
+    try { $imagickWebp = in_array('WEBP', Imagick::queryFormats('WEBP'), true); }
+    catch (Throwable $e) { $imagickWebp = false; }
 }
+
+// Resizing is where most of the saving comes from -- a 6000px camera JPEG cut
+// to 2000px sheds ~90% before format even matters. So WebP is preferred but
+// not required: without it we still emit resized JPEGs, which is far better
+// than doing nothing while waiting on a host.
+$useWebp = $imagickWebp || $hasGdWebp;
+$canWork = $hasImagick || $gdLoaded;
+
+if (!$canWork) {
+    echo '<p class="err"><strong>No image library is enabled for PHP on this server.</strong></p>';
+    echo '<h2>What is available right now</h2><table>';
+    foreach ([
+        'GD extension loaded'      => $gdLoaded,
+        'GD can write WebP'        => $hasGdWebp,
+        'GD can write JPEG'        => $hasGdJpeg,
+        'Imagick class available'  => $hasImagick,
+        'Imagick supports WebP'    => $imagickWebp,
+    ] as $label => $ok) {
+        printf('<tr><td>%s</td><td class="%s">%s</td></tr>',
+            $label, $ok ? 'ok' : 'err', $ok ? 'yes' : 'no');
+    }
+    echo '</table>';
+    echo '<p>PHP version: <code>' . PHP_VERSION . '</code></p>';
+    echo '<h2>How to fix it</h2>';
+    echo '<p>This is almost always a switched-off extension rather than something '
+       . 'your host has to do. Switching PHP versions resets extensions to that '
+       . "version's defaults, so an upgrade commonly turns GD off.</p>";
+    echo '<ol>'
+       . '<li>In cPanel, open <strong>Select PHP Version</strong>.</li>'
+       . '<li>Go to the <strong>Extensions</strong> tab.</li>'
+       . '<li>Tick <code>gd</code>, and <code>imagick</code> if it is listed.</li>'
+       . '<li>Save, then reload this page.</li>'
+       . '</ol>';
+    echo '<p>If neither appears in that list, then it is worth asking your host to '
+       . 'enable GD for PHP ' . PHP_VERSION . '.</p>';
+    exit;
+}
+
 $engine = $hasImagick ? 'Imagick' : 'GD';
+$outExt = $useWebp ? 'webp' : 'jpg';
 
 if (!is_dir($src)) {
     exit('<p class="err">Source folder not found: <code>' . htmlspecialchars(SRC_DIR) . '</code></p>');
@@ -88,7 +135,7 @@ sort($files);
 
 $todo = [];
 foreach ($files as $f) {
-    $target = $out . '/' . preg_replace('/\.(jpe?g|png)$/i', '.webp', $f);
+    $target = $out . '/' . preg_replace('/\.(jpe?g|png)$/i', '.' . $outExt, $f);
     if (!file_exists($target)) { $todo[] = $f; }
 }
 
@@ -96,7 +143,7 @@ $total = count($files);
 $done  = $total - count($todo);
 $pct   = $total ? round($done / $total * 100) : 100;
 
-echo '<p>Engine: <strong>' . $engine . '</strong> &middot; Source: <code>' . htmlspecialchars(SRC_DIR) . '</code> '
+echo '<p>Engine: <strong>' . $engine . '</strong> &middot; Writing: <strong>' . strtoupper($outExt) . '</strong> &middot; Source: <code>' . htmlspecialchars(SRC_DIR) . '</code> '
    . '&middot; Output: <code>' . htmlspecialchars(OUT_DIR) . '</code></p>';
 echo '<div class="bar"><div style="width:' . $pct . '%"></div></div>';
 echo '<p><strong>' . $done . '</strong> of <strong>' . $total . '</strong> converted (' . $pct . '%).</p>';
@@ -105,11 +152,12 @@ if (!$todo) {
     $srcBytes = 0; $outBytes = 0;
     foreach ($files as $f) { $srcBytes += @filesize($src . '/' . $f); }
     foreach (scandir($out) as $f) {
-        if (preg_match('/\.webp$/i', $f)) { $outBytes += @filesize($out . '/' . $f); }
+        if (preg_match('/\.(webp|jpg)$/i', $f)) { $outBytes += @filesize($out . '/' . $f); }
     }
     $mb = fn($b) => number_format($b / 1048576, 1) . ' MB';
     echo '<h2 class="ok">Finished.</h2>';
-    echo '<p>Originals: <strong>' . $mb($srcBytes) . '</strong> &rarr; WebP: <strong>' . $mb($outBytes) . '</strong>';
+    echo '<p>Originals: <strong>' . $mb($srcBytes) . '</strong> &rarr; '
+       . strtoupper($outExt) . ': <strong>' . $mb($outBytes) . '</strong>';
     if ($srcBytes > 0) {
         echo ' &mdash; a ' . round((1 - $outBytes / max($srcBytes, 1)) * 100) . '% reduction.';
     }
@@ -117,6 +165,12 @@ if (!$todo) {
     echo '<p class="warn"><strong>Now do two things:</strong><br>'
        . '1. Spot-check a few images in <code>' . htmlspecialchars(OUT_DIR) . '</code>.<br>'
        . '2. <strong>Delete this script from the server.</strong> It should not stay reachable.</p>';
+    if (!$useWebp) {
+        echo '<p class="warn">WebP was not available, so these were written as resized JPEGs. '
+           . 'Most of the saving comes from the resize, so this is still a large win. '
+           . 'If you enable <code>gd</code> or <code>imagick</code> with WebP support later, '
+           . 'delete the output folder and re-run to get smaller files still.</p>';
+    }
     echo '<p>Keep the originals until you are satisfied. They are your masters — '
        . 'ideally they live in your photo library rather than on the web server at all.</p>';
     exit;
@@ -142,7 +196,7 @@ echo '<table>';
 
 foreach ($batch as $f) {
     $in  = $src . '/' . $f;
-    $dst = $out . '/' . preg_replace('/\.(jpe?g|png)$/i', '.webp', $f);
+    $dst = $out . '/' . preg_replace('/\.(jpe?g|png)$/i', '.' . $outExt, $f);
     $inSize = @filesize($in);
 
     try {
@@ -154,7 +208,7 @@ foreach ($batch as $f) {
                 if ($w >= $h) { $img->resizeImage(MAX_EDGE, 0, Imagick::FILTER_LANCZOS, 1);
                 } else {        $img->resizeImage(0, MAX_EDGE, Imagick::FILTER_LANCZOS, 1); }
             }
-            $img->setImageFormat('webp');
+            $img->setImageFormat($useWebp ? 'webp' : 'jpeg');
             $img->setImageCompressionQuality(QUALITY);
             $img->stripImage();
             $img->writeImage($dst);
@@ -171,7 +225,8 @@ foreach ($batch as $f) {
                 $im2 = imagescale($im, (int) round($w * $scale), (int) round($h * $scale), IMG_BICUBIC);
                 if ($im2) { imagedestroy($im); $im = $im2; }
             }
-            imagewebp($im, $dst, QUALITY);
+            if ($useWebp) { imagewebp($im, $dst, QUALITY); }
+            else           { imagejpeg($im, $dst, QUALITY); }
             imagedestroy($im);
         }
 
