@@ -7,6 +7,12 @@ deployment:
     - /bin/cp -R about.php $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/services
     - /bin/cp -R services/index.php $DEPLOYPATH/services/index.php
+    - /bin/mkdir -p $DEPLOYPATH/services/local-seo
+    - /bin/cp -R services/local-seo/index.php $DEPLOYPATH/services/local-seo/index.php
+    - /bin/mkdir -p $DEPLOYPATH/services/website-design
+    - /bin/cp -R services/website-design/index.php $DEPLOYPATH/services/website-design/index.php
+    - /bin/mkdir -p $DEPLOYPATH/services/drone-photography
+    - /bin/cp -R services/drone-photography/index.php $DEPLOYPATH/services/drone-photography/index.php
     - /bin/cp -R blog-data $DEPLOYPATH
     - /bin/cp -R sitemap.xml $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/css

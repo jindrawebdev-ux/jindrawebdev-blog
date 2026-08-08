@@ -40,6 +40,7 @@ const STATIC_PAGES = [
   { loc: '/services', changefreq: 'monthly', priority: '0.9' },
   { loc: '/services/website-design/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/services/local-seo/', changefreq: 'monthly', priority: '0.8' },
+  { loc: '/services/drone-photography/', changefreq: 'monthly', priority: '0.8' },
   { loc: '/blog', changefreq: 'weekly', priority: '0.9' },
   { loc: '/about', changefreq: 'monthly', priority: '0.8' },
   { loc: '/contact', changefreq: 'monthly', priority: '0.8' },

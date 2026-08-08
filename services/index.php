@@ -37,7 +37,7 @@ $page_schema = <<<HTML
         { "@type": "ListItem", "position": 2, "name": "Brand + visual direction" },
         { "@type": "ListItem", "position": 3, "name": "Google + local SEO", "url": "https://jindrawebdev.com/services/local-seo/" },
         { "@type": "ListItem", "position": 4, "name": "Digital cleanup" },
-        { "@type": "ListItem", "position": 5, "name": "Drone footage + aerial photography" }
+        { "@type": "ListItem", "position": 5, "name": "Drone footage + aerial photography", "url": "https://jindrawebdev.com/services/drone-photography/" }
       ]
     }
   ]
@@ -218,6 +218,7 @@ include $_SERVER['DOCUMENT_ROOT'] . "/includes/header.php";
                             <li>✓ Mobile-friendly design</li>
                             <li>✓ Contact-focused structure</li>
                         </ul>
+                        <a href="/services/drone-photography/" class="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-brand-dark hover:text-brand-charcoal transition">Drone &amp; aerial details <span aria-hidden="true">&rarr;</span></a>
                     </article>
                     <article class="rounded-3xl border border-white/10 bg-white/5 p-7">
                         <h3 class="font-serif text-2xl font-bold mb-3">Full digital refresh</h3>
