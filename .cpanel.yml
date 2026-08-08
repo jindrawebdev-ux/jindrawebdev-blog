@@ -5,6 +5,8 @@ deployment:
     - /bin/cp -R blog.php $DEPLOYPATH
     - /bin/cp -R article.php $DEPLOYPATH
     - /bin/cp -R about.php $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/services
+    - /bin/cp -R services/index.php $DEPLOYPATH/services/index.php
     - /bin/cp -R blog-data $DEPLOYPATH
     - /bin/cp -R sitemap.xml $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/css
