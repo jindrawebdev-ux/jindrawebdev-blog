@@ -29,7 +29,20 @@ const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '../..');
 const OUT_DIR = path.join(ROOT, 'images/blog');
+const PHOTO_DIR = path.join(ROOT, 'images/blog/photos');
 const DATA = path.join(ROOT, 'blog-data/articles.json');
+
+/**
+ * An article may name a real photograph via a "photo" field in articles.json.
+ * When present it becomes the listing/hero image directly, and the share card
+ * is composited over it. Articles without one fall back to generated geometry,
+ * so the weekly pipeline never blocks waiting on photography.
+ */
+function photoDataUri(name) {
+  const f = path.join(PHOTO_DIR, `${name}.jpg`);
+  if (!fs.existsSync(f)) return null;
+  return `data:image/jpeg;base64,${fs.readFileSync(f).toString('base64')}`;
+}
 
 const BRAND = {
   dark: '#768473',
@@ -98,10 +111,19 @@ const shell = (body, bg) => `<!doctype html><html><head><meta charset="utf-8"><s
        line-height:1.12;position:relative;max-width:900px}
 </style></head><body>${body}</body></html>`;
 
-const ogCard = (title, category) =>
-  shell(
+const ogCard = (title, category, photo) => {
+  // Over a photograph the text needs a scrim, or a light sky makes the headline
+  // unreadable. Vertical gradient keeps the image visible up top while going
+  // near-solid behind the title and footer.
+  const bg = photo
+    ? `<div style="position:absolute;inset:0;background-image:url('${photo}');
+                   background-size:cover;background-position:center"></div>
+       <div style="position:absolute;inset:0;background:linear-gradient(
+                   to bottom, rgba(30,30,30,.45) 0%, rgba(30,30,30,.72) 45%, rgba(30,30,30,.90) 100%)"></div>`
+    : `<div class="rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div>`;
+  return shell(
     `<div class="card">
-       <div class="rings"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div>
+       ${bg}
        <div class="kicker">${esc(category)}</div>
        <div>
          <div class="rule"></div>
@@ -111,6 +133,7 @@ const ogCard = (title, category) =>
      </div>`,
     BRAND.charcoal
   );
+};
 
 /**
  * Hero / listing artwork: deliberately TEXT-FREE.
@@ -257,8 +280,8 @@ async function main() {
   // file each time. Pass --force to regenerate after a template change.
   const force = process.argv.includes('--force');
 
-  const shoot = async (html, file) => {
-    if (!force && fs.existsSync(path.join(OUT_DIR, file))) {
+  const shoot = async (html, file, alwaysRedraw = false) => {
+    if (!force && !alwaysRedraw && fs.existsSync(path.join(OUT_DIR, file))) {
       console.log(`  ${file}  (exists, skipped)`);
       return;
     }
@@ -279,10 +302,24 @@ async function main() {
   for (const a of data.articles) {
     const label = labels[a.category] || 'Insights';
     const seed = slugSeed(a.slug);
-    await shoot(ogCard(a.title, label), `${a.slug}-og.jpg`);
-    await shoot(heroCard(seed), `${a.slug}-hero.jpg`);
+    const photo = a.photo ? photoDataUri(a.photo) : null;
+
+    if (a.photo && !photo) {
+      console.log(`  ! "${a.photo}" not found in images/blog/photos — using generated art`);
+    }
+
+    // Share card is always generated: a bare photo has no headline, and on
+    // social the image is doing the headline's job.
+    await shoot(ogCard(a.title, label, photo), `${a.slug}-og.jpg`, Boolean(photo));
     a.ogImage = `/images/blog/${a.slug}-og.jpg`;
-    a.heroImage = `/images/blog/${a.slug}-hero.jpg`;
+
+    if (photo) {
+      // Real photograph used as-is for the listing card.
+      a.heroImage = `/images/blog/photos/${a.photo}.jpg`;
+    } else {
+      await shoot(heroCard(seed), `${a.slug}-hero.jpg`);
+      a.heroImage = `/images/blog/${a.slug}-hero.jpg`;
+    }
   }
 
   await browser.close();

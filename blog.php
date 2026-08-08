@@ -101,8 +101,30 @@ usort($articles, function ($a, $b) {
                     data-category="<?php echo htmlspecialchars($a['category']); ?>"
                     data-search="<?php echo htmlspecialchars($searchBlob); ?>"
                 >
+                    <?php
+                    // Real photographs are processed into three widths by
+                    // tools/photos/process.js, so phones fetch a 480px file
+                    // rather than the 1200px one. Generated artwork has no
+                    // variants, hence the conditional srcset.
+                    $img = $a['heroImage'];
+                    $isPhoto = strpos($img, '/images/blog/photos/') === 0;
+                    $srcset = '';
+                    if ($isPhoto) {
+                        $stem = substr($img, 0, -4); // strip .jpg
+                        $srcset = $stem . '-480.jpg 480w, ' . $stem . '-800.jpg 800w, ' . $img . ' 1200w';
+                    }
+                    ?>
                     <div class="aspect-[1200/630] bg-brand-offwhite overflow-hidden">
-                        <img src="<?php echo htmlspecialchars($a['heroImage']); ?>" alt="<?php echo htmlspecialchars($a['title']); ?>" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img
+                            src="<?php echo htmlspecialchars($img); ?>"
+                            <?php if ($srcset): ?>
+                            srcset="<?php echo htmlspecialchars($srcset); ?>"
+                            sizes="(min-width: 768px) 440px, 100vw"
+                            <?php endif; ?>
+                            alt="<?php echo htmlspecialchars($a['title']); ?>"
+                            width="1200" height="630"
+                            loading="lazy" decoding="async"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
                     <div class="p-6 flex flex-col flex-1">
                         <p class="text-[11px] uppercase tracking-[0.2em] font-bold text-brand-dark mb-3"><?php echo htmlspecialchars($catLabel); ?></p>

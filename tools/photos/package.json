@@ -1,0 +1,7 @@
+{
+  "name": "jindrawebdev-photo-processor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crops and compresses source photographs into web-ready blog images",
+  "dependencies": { "playwright": "^1.49.0" }
+}

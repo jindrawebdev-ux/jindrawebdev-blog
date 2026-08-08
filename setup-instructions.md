@@ -46,6 +46,16 @@ Adding an article is exactly two steps — this structure is deliberately automa
 2. Add one object to the `"articles"` array in `blog-data/articles.json` with that same `slug`, plus title, metaTitle, metaDescription, category, tags, dates, read time, image path, excerpt, quickAnswer, optional faq[], and sources[].
 
 
+### Using a real photograph
+
+Add `"photo": "<name>"` to the article's entry in `articles.json` and the
+listing card uses that photograph, with the share card composited from it
+plus the headline. See `tools/photos/README.md` for processing photos into
+the right sizes.
+
+Articles without a `photo` fall back to generated artwork, so you can publish
+on schedule and add photography later.
+
 ### Publishing a post (the automated flow)
 
 Two files, one push:
